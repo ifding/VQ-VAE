@@ -42,36 +42,52 @@ def plot_loss(train_res_recon_error, train_res_perplexity, save_dir):
   plt.close(f)  # close the figure window
 
 
-def convert_batch_to_image_grid(image_batch):
-  reshaped = (image_batch.reshape(4, 8, 32, 32, 3)
+def convert_batch_to_image_grid(img_batch, img_shape):
+  reshaped = (img_batch.reshape(4, 8, img_shape[0], img_shape[1], img_shape[2])
               .transpose(0, 2, 1, 3, 4)
-              .reshape(4 * 32, 8 * 32, 3))
-  return reshaped
+              .reshape(4 * img_shape[0], 8 * img_shape[1], img_shape[2]))
+  return np.squeeze(reshaped)
 
-def plot_reconstructions(data_recon, reconstructions, save_dir):
+def plot_reconstructions(data_recon, reconstructions, img_shape, save_dir):
   f = plt.figure(figsize=(16,8))
   ax = f.add_subplot(2,2,1)
-  ax.imshow(convert_batch_to_image_grid(data_recon[:32]),
-            interpolation='nearest')
-  ax.set_title('training data originals')
+  if img_shape[2] == 1:
+    ax.imshow(convert_batch_to_image_grid(data_recon[:32], img_shape),
+              cmap='gray') 
+  else:
+    ax.imshow(convert_batch_to_image_grid(data_recon[:32], img_shape),
+              interpolation='nearest')
+  ax.set_title('normal data originals')
   plt.axis('off')
   
   ax = f.add_subplot(2,2,2)
-  ax.imshow(convert_batch_to_image_grid(reconstructions[:32]),
-            interpolation='nearest')
-  ax.set_title('training data reconstructions')
+  if img_shape[2] == 1:
+    ax.imshow(convert_batch_to_image_grid(reconstructions[:32], img_shape),
+              cmap='gray')    
+  else:  
+    ax.imshow(convert_batch_to_image_grid(reconstructions[:32], img_shape),
+              interpolation='nearest')
+  ax.set_title('normal data reconstructions')
   plt.axis('off')
   
   ax = f.add_subplot(2,2,3)
-  ax.imshow(convert_batch_to_image_grid(data_recon[-32:]),
-            interpolation='nearest')
-  ax.set_title('validation data originals')
+  if img_shape[2] == 1:
+    ax.imshow(convert_batch_to_image_grid(data_recon[-32:], img_shape),
+              cmap='gray')    
+  else:  
+    ax.imshow(convert_batch_to_image_grid(data_recon[-32:], img_shape),
+              interpolation='nearest')
+  ax.set_title('adversarial data originals')
   plt.axis('off')
   
   ax = f.add_subplot(2,2,4)
-  ax.imshow(convert_batch_to_image_grid(reconstructions[-32:]),
-            interpolation='nearest')
-  ax.set_title('validation data reconstructions')
+  if img_shape[2] == 1:
+    ax.imshow(convert_batch_to_image_grid(reconstructions[-32:], img_shape),
+              cmap='gray')    
+  else:  
+    ax.imshow(convert_batch_to_image_grid(reconstructions[-32:], img_shape),
+              interpolation='nearest')
+  ax.set_title('adversarial data reconstructions')
   plt.axis('off')
   
   f.savefig(os.path.join(save_dir, 'reconstruction.png'))

@@ -63,7 +63,7 @@ class VQVAE(object):
     x_recon = self.decoder(vq_output_train["quantize"])
     self.recon_error = tf.reduce_mean((x_recon - self.x)**2) / self.xs.data_variance  # Normalized MSE
     self.loss = self.recon_error + vq_output_train["loss"]
-    
+
     # For evaluation, make sure is_training=False!
     self.vq_output_eval = self.vq_vae(self.z, is_training=False)
     self.x_recon_eval = self.decoder(self.vq_output_eval["quantize"])
@@ -176,7 +176,7 @@ class VQVAE(object):
     num_pts_to_plot = data_recon.shape[0]
     recon_batch_size = self.batch_size
     reconstructions = np.zeros_like(data_recon) 
-    latent = np.zeros(shape=(num_pts_to_plot, 8, 8, self.embedding_dim))
+    latent = np.zeros(shape=(num_pts_to_plot, self.xs.z_size, self.xs.z_size, self.embedding_dim))
 
     print('Data Shape = {}, Labels Shape = {}'.format(data_recon.shape, label_recon.shape))
     for b in range(int(np.ceil(num_pts_to_plot * 1.0 / recon_batch_size))):
@@ -197,7 +197,7 @@ class VQVAE(object):
 
     np.save('logs/%s_latent.npy'%(self.data,), latent)
 
-    util.plot_reconstructions(data_recon, reconstructions, self.im_save_dir)
+    util.plot_reconstructions(data_recon, reconstructions, self.xs.shape, self.im_save_dir)
 
 
 if __name__ == '__main__':

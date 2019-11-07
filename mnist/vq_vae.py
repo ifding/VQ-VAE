@@ -50,12 +50,13 @@ class Encoder(snt.AbstractModule):
         kernel_shape=(3, 3),
         stride=(1, 1),
         name="enc_3")(h)
-        
+
     h = residual_stack(
         h,
         self._num_hiddens,
         self._num_residual_layers,
         self._num_residual_hiddens)
+
     return h
 
 class Decoder(snt.AbstractModule):
@@ -88,7 +89,7 @@ class Decoder(snt.AbstractModule):
     h = tf.nn.relu(h)
 
     x_recon = snt.Conv2DTranspose(
-        output_channels=3,
+        output_channels=1,
         output_shape=None,
         kernel_shape=(4, 4),
         stride=(2, 2),
