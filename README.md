@@ -1,39 +1,30 @@
-# VQ-VAE
+# CT-Lung-Segmentation
 
-### Using pip install the following packages:
+This repository contains a Pytorch implementation of Lung CT image segmentation Using U-net
 
-python 3.7
+## Requirement
 
-tensorflow==1.15.0
+segmentation_models_pytorch
 
-tensorflow-gpu==1.15.0
+jupyter
 
-tensorflow-probability==0.7.0
+numpy
 
-dm-sonnet==1.35
+opencv-python
 
+Pillow
 
-### Training
+torch==1.8.1
 
-MNIST
+torchvision==0.9.1
 
-```
-python main.py --data mnist  --K 16 --dz 5 --train True
-```
-
-cifar10
+tqdm==4.61.0
 
 ```
-python main.py --data mnist  --K 512 --dz 64 --train True
+    pip install -r requirements.txt
 ```
 
+## Dataset
 
-### Load saved model and run on Test data
-
-best_timestamp is like 2019_11_05_15_21_08,  can be found in `logs` or `checkpoint_dir`
-
-```
-python main.py --data mnist  --K 16 --dz 5 --timestamp <best_timestamp>
-```
-
-It also save the zq to `logs` folder, `cifar_latent.npy`, to read it just by `np.load`
+1. Download the data from [Kaggle/Finding and Measuring Lungs in CT Data](https://www.kaggle.com/kmader/finding-lungs-in-ct-data)
+2. With totally 267 CT slices, I randomly select 200 slices for training and 67 for testing
